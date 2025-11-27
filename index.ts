@@ -1,23 +1,33 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import dotenv from "dotenv";
+import path from "path";
 
-import apiV1 from "./routes/v1"; 
+
+import apiV1 from "./routes/v1";
+import pages from "./routes/pages";
+import bodyParser from "body-parser";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-app.use("/v1", apiV1);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views")); 
 
-app.use((req,res,next)=>{
-    res.status(404).send('<h1>Not found</h1>')
-})
+app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+app.use("/pages", pages);
+app.use("/api/v1", apiV1);
+
+
+
+
+app.use((req, res, next) => {
+  res.status(404).send("<h1>Not found</h1>");
 });
 
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+  console.log(`[server]: Server running on http://localhost:${port}`);
 });

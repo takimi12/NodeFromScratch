@@ -1,0 +1,14 @@
+<%- include('includes/header', { activePage: activePage }) %>
+
+
+<% if(productsData.length > 0){ %>
+<div>
+  <% for(let product of productsData){ %>
+  <h1><%= product.name %></h1>
+  <h2><%= product.price %></h2>
+  <h3><%= product.desc %></h3>
+  <% } %>
+</div>
+<% } else { %>
+<p>No products...</p>
+<% } %>

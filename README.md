@@ -136,3 +136,5 @@ npm i -D nodemon concurrently
 # NodeFromScratch
 # NodeFromScratch
 # NodeFromScratch
+//////////////
+1.Rozdial 2 npm i body-parser
