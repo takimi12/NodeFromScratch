@@ -1,49 +1,26 @@
 {
   "compilerOptions": {
-    // File Layout
-    "outDir": "./dist",
-    
-    // Environment Settings
+    "target": "ESNext",
     "module": "CommonJS",
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "types": ["node"],
-    
-    // Module Resolution
-    "moduleResolution": "node",
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
+
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "isolatedModules": false,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    
-    // Other Outputs
+
+    "outDir": "./dist",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "removeComments": false,
-    
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    
-    // Style Options
-    "forceConsistentCasingInFileNames": true,
-    
-    // Recommended Options
-    "strict": true,
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    
-    // Additional Quality Checks
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src/**/*",
-    "index.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ]
+  "include": ["src", "index.ts"],
+  "exclude": ["node_modules", "dist"]
 }

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import path from "path";
@@ -6,6 +7,7 @@ import path from "path";
 import apiV1 from "./routes/v1";
 import pages from "./routes/pages";
 import bodyParser from "body-parser";
+import { AppDataSource } from "./data-source";
 
 dotenv.config();
 
@@ -28,6 +30,10 @@ app.use((req, res, next) => {
   res.status(404).send("<h1>Not found</h1>");
 });
 
-app.listen(port, () => {
-  console.log(`[server]: Server running on http://localhost:${port}`);
-});
+
+AppDataSource.initialize().then(()=>{
+  app.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`);
+  });
+})
+
