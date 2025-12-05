@@ -6,17 +6,17 @@ import {
   getProduct,
   getProducts,
   updateProduct,
-} from "../../src/controllers/product";
+} from "../../controllers/product";
 
 import {
   loginUser,
   logoutUser,
   registerUser,
-} from "../../src/controllers/authController";
+} from "../../controllers/authController";
 
-import { AuthRequest, verifyToken } from "../../src/middlewares/isAuth";
+import { AuthRequest, verifyToken } from "../../middlewares/isAuth";
 
-import { getUserCart } from "../../src/controllers/cart";
+import { getUserCart } from "../../controllers/cart";
 
 const router = Router();
 
