@@ -5,6 +5,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import bodyParser from "body-parser";
+import { createClient } from "redis";
 
 import apiV1 from "../routes/v1";
 import pages from "../routes/pages/index";
@@ -16,6 +17,9 @@ dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
+
+// ===== Redis Client =====
+let redisClient: ReturnType<typeof createClient> | null = null;
 
 // ===== View engine =====
 app.set("view engine", "ejs");
@@ -37,7 +41,7 @@ app.use(
 app.use("/pages", pages);
 app.use("/api/v1", apiV1);
 
-swaggerDocs(app)
+swaggerDocs(app);
 
 // ===== 404 =====
 app.use((req, res, next) => {
@@ -48,12 +52,44 @@ app.use((req, res, next) => {
 app.use(rollbar.errorHandler());
 
 // ===== Start servera =====
-AppDataSource.initialize().then(() => {
+const startServer = async () => {
+  try {
+    // Inicjalizacja bazy danych
+    await AppDataSource.initialize();
+    console.log("✅ Database connected");
 
-  app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
-    rollbar.log("Server started successfully");
-  });
-});
+    // Połączenie z Redis
+    try {
+      redisClient = createClient({
+        socket: {
+          host: process.env.REDIS_HOST || "localhost",
+          port: Number(process.env.REDIS_PORT) || 6379,
+        },
+      });
 
+      redisClient.on("error", (err) => {
+        console.error("Redis error:", err.message);
+      });
 
+      await redisClient.connect();
+      console.log("✅ Redis connected");
+    } catch (redisError) {
+      console.warn("⚠️  Redis connection failed, continuing without cache");
+      redisClient = null;
+    }
+
+    // Start serwera HTTP
+    app.listen(port, () => {
+      console.log(`[server]: Server is running at http://localhost:${port}`);
+      rollbar.log("Server started successfully");
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    rollbar.error(error as Error);
+    process.exit(1);
+  }
+};
+
+startServer();
+
+export { redisClient };
