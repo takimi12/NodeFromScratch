@@ -1,14 +1,78 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import {Product} from "../models/product"
+import { getProductsSchema } from "../validators/getProductSchema";
+import { Equal, Like } from "typeorm";
 
 
 const productRepository = AppDataSource.getRepository(Product); 
 
+// export const getProducts = async (req: Request, res: Response) => {
+//   try {
+//     const allProducts = await productRepository.find();
+//     res.json(allProducts);
+//   } catch (error) {
+//     console.error("Error fetching products:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const allProducts = await productRepository.find();
-    res.json(allProducts);
+    const {
+      query: {
+        page = 1,
+        perPage = 10,
+        sortBy = "createdAt",
+        sortDir = "desc",
+        filterBy,
+        query,
+      },
+    } = await getProductsSchema.parseAsync(req);
+
+    const skip = (page - 1) * perPage;
+    const take = perPage;
+
+    const order: Record<string, "asc" | "desc"> = {
+      [sortBy]: sortDir.toUpperCase() === "asc" ? "asc" : "desc",
+    };
+
+    let where = {};
+    if (filterBy && query) {
+      switch (filterBy) {
+        case "name":
+          where = { name: Like(`%${query}%`) };
+          break;
+        case "price":
+          where = { price: Equal(parseFloat(query)) };
+          break;
+        default:
+          where = {};
+      }
+    }
+
+    const totalItems = await productRepository.count({ where });
+
+    const products = await productRepository.find({ skip, take, where, order });
+
+    const totalPages = Math.ceil(totalItems / perPage);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+    const nextPage = hasNextPage ? page + 1 : null;
+    const prevPage = hasPreviousPage ? page - 1 : null;
+    const lastPage = totalPages;
+
+    res.json({
+      data: products,
+      page,
+      perPage,
+      totalItems,
+      totalPages,
+      hasNextPage,
+      hasPreviousPage,
+      nextPage,
+      prevPage,
+      lastPage,
+    });
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).json({ message: "Internal server error" });
