@@ -1,0 +1,13 @@
+{{> header}}
+
+{{#if productsData.length}}
+  <div>
+    {{#each productsData}}
+      <h1>{{this.name}}</h1>
+      <h2>{{this.price}}</h2>
+      <h3>{{this.desc}}</h3>
+    {{/each}}
+  </div>
+{{else}}
+  <p>No products...</p>
+{{/if}}

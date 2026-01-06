@@ -1,21 +1,27 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.render("add-product",
-   { activePage: "add" });
+router.get("/", (req: Request, res: Response) => {
+  res.render("add-product", { activePage: 'add' });
 });
 
-router.get("/products", (req, res) => {
-  const productsData = [
-    { name: "Test", price: 21, desc: "Lorem ipsum" },
+interface Product {
+  name: string;
+  price: number;
+  desc: string;
+}
+
+router.get("/products", (req: Request, res: Response) => {
+  const productsData: Product[] = [
+    {
+      name: "Test Product",
+      price: 21,
+      desc: "lorem ipsum",
+    },
   ];
-  res.render("products", {
-    productsData,
-    activePage: "products"
-  });
+  
+  res.render("products", { productsData, activePage: 'products' });
 });
-
 
 export default router;
