@@ -1,0 +1,15 @@
+nav
+  ul
+    li
+      a(href="/pages" class=(activePage === 'add' ? 'active' : '')) Add Product
+    li
+      a(href="/pages/products" class=(activePage === 'products' ? 'active' : '')) Products
+
+style.
+  .active {
+    font-weight: bold;
+    color: red;
+    text-decoration: underline;
+  }
+
+hr

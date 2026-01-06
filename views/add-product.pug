@@ -1,0 +1,15 @@
+include includes/header
+
+h1 Add product
+
+form(method="POST" action="/api/v1/product")
+  label ID
+  input(type="text" name="id")
+  
+  label Name
+  input(type="text" name="name")
+  
+  label Price
+  input(type="text" name="price")
+  
+  button(type="submit") Add

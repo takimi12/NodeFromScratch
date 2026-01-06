@@ -1,0 +1,10 @@
+include includes/header
+
+if productsData && productsData.length > 0
+  div
+    each product in productsData
+      h1= product.name
+      h2= product.price
+      h3= product.desc
+else
+  p No products...
