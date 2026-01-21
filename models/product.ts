@@ -1,31 +1,4 @@
-// import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 
-// @Entity() //dekorator tworzący tabelę
-// export class Product {
-//   @PrimaryGeneratedColumn("uuid") // dekorator tworzący kolumnę z kluczem głównym, która jest generowana automatycznie
-//   id!: string;
-//   @Column({
-//     unique: true,
-//   }) // dekorator tworzący kolumnę
-//   name!: string;
-//   @Column({
-//     length: 150,
-//     default: ''
-//   })
-//   description!: string;
-//   @Column("decimal", { precision: 10, scale: 2 }) // nadaje ograniczenia na ilość liczb przed (precision) i po przecinku (scale)
-//   price!: number;
-//   @Column({
-//     default: 1
-//   })
-//   stock!: number;
-//   @CreateDateColumn() //automatycznie dodaje datę podczas tworzenia
-//   createdAt!: Date;
-//   @UpdateDateColumn() //automatycznie dodaje datę podczas aktualizacji
-//   updatedAt!: Date;
-//   @DeleteDateColumn({ type: "timestamptz", nullable: true }) //pozwala obsługiwać soft delete
-//   deletedAt?: Date;
-// }
 
 import {
   Entity,
@@ -55,7 +28,7 @@ export class Product {
   })
   description!: string;
   
-  @Column("decimal", { precision: 2, scale: 2 })
+  @Column("decimal", { precision: 10, scale: 2 })
   price!: number;
   
   @Column({

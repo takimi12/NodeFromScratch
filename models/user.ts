@@ -1,12 +1,15 @@
+
 import { Entity, PrimaryGeneratedColumn, OneToOne, Column } from "typeorm";
 import { Cart } from "./cart";
 
 //tworzenie typu enum
+
 export enum UserRole {
   ADMIN = "admin",
   EDITOR = "editor",
   GHOST = "ghost",
 }
+
 
 @Entity() //dekorator tworzący tabelę
 export class User {
@@ -20,6 +23,9 @@ export class User {
     default: UserRole.GHOST,
   })
   role!: UserRole;
-  @OneToOne(() => Cart, (cart: Cart) => cart.id)
+  @OneToOne(() => Cart, (cart) => cart.user) // ← TU JEST FIX
   cart!: Cart; //jeden user ma jeden koszyk, powiązanie po ID
 }
+
+
+
